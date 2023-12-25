@@ -1,0 +1,107 @@
+import math
+import torch
+import torch.nn as nn
+from torch.nn.parameter import Parameter
+from torch.nn.modules.module import Module
+
+class nconv(Module):
+    def __init__(self):
+        super(nconv,self).__init__()
+
+    def forward(self,x, A):
+      #  print('type', x.type(), A.type())
+        x = torch.einsum('ncvl,vw->ncwl',(x,A))
+
+     #   x = torch.einsum('ncvl,wv->ncwl', (x, A))
+        return x.contiguous()
+
+class linear(Module):
+    def __init__(self,c_in,c_out):
+        super(linear,self).__init__()
+        self.mlp = nn.Linear(c_in, c_out, bias=True)
+
+    def forward(self,x):
+        return self.mlp(x)
+
+class gcn(Module):
+    def __init__(self,c_in,c_out,device,dropout=0):
+        super(gcn,self).__init__()
+        self.nconv = nconv()
+        self.mlp = linear(c_in,c_out)
+        self.dropout = dropout
+
+    def forward(self,x,a):
+
+
+        x1 = self.nconv(x, a)  # [batch_size, T,num_nodes, F]
+
+        h = self.mlp(x1)
+
+        return h
+
+class Linear(Module):
+    def __init__(self, c_in, c_out, device, bias=False):
+        super(Linear, self).__init__()
+        self.weight = Parameter(torch.rand(c_in, c_out, dtype=torch.float)).to(device)
+
+        if bias:
+            self.bias = Parameter(torch.rand(c_out)).to(device)
+        else:
+            self.register_parameter('bias', None)
+
+        self.reset_parameters()
+
+    def forward(self, input):
+
+        output = torch.matmul(input, self.weight)
+        if self.bias is not None:
+            return output + self.bias
+        else:
+            return output
+
+    def reset_parameters(self):
+        stdv = 1. / math.sqrt(self.weight.size(1))
+        self.weight.data.uniform_(-stdv, stdv)
+        if self.bias is not None:
+            self.bias.data.uniform_(-stdv, stdv)
+
+
+
+
+
+class GraphConvolution(Module):
+    def __init__(self, in_features, out_features, device, bias=True):
+        super(GraphConvolution, self).__init__()
+        self.in_feats = in_features
+        self.out_feats = out_features
+
+        self.weight = Parameter(torch.rand(in_features, out_features, dtype=torch.float)).to(device)
+
+
+        if bias:
+
+            self.bias = Parameter(torch.rand(out_features)).to(device)
+
+        else:
+            self.register_parameter('bias', None)
+        self.reset_parameters()
+
+
+    def reset_parameters(self):
+        stdv = 1. / math.sqrt(self.weight.size(1))
+        self.weight.data.uniform_(-stdv, stdv)
+        if self.bias is not None:
+            self.bias.data.uniform_(-stdv, stdv)
+
+    def forward(self, input, adj):  #
+        support = torch.matmul(input, self.weight)  # B, layers, N, F,
+        output = torch.matmul(adj, support)
+        if self.bias is not None:
+            return output + self.bias
+        else:
+            return output
+
+    def __repr__(self):
+        return self.__class__.__name__ + ' (' \
+               + str(self.in_feats) + ' -> ' \
+               + str(self.out_feats) + ')'
