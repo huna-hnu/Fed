@@ -346,15 +346,15 @@ def normalization(train, val, test, train_y, val_y, test_y):
 # else:
 #     id_filename = None
 
-num_of_vertices = 207#int(data_config['num_of_vertices'])
+num_of_vertices = 170#int(data_config['num_of_vertices'])
 points_per_hour =12# int(data_config['points_per_hour'])
 num_for_predict = 12#int(data_config['num_for_predict'])
 len_input = 12#int(data_config['len_input'])
-dataset_name ='METR-LA'# data_config['dataset_name']
+dataset_name ='PEMS08'# data_config['dataset_name']
 num_of_weeks =0# int(training_config['num_of_weeks'])
 num_of_days =0# int(training_config['num_of_days'])
 num_of_hours =1# int(training_config['num_of_hours'])
-graph_signal_matrix_filename = './data/METR-LA/metr-la.h5'#data_config['graph_signal_matrix_filename']
+graph_signal_matrix_filename = './data/PEMS08/pems08.npz'#data_config['graph_signal_matrix_filename']
 
 adj_file= ''#data_config['adj_filename']
 num_client =6
