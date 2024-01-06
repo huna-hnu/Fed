@@ -3,7 +3,7 @@
 
 ## Requirements
 - python 3
-- see `requirements.txt`
+- pytoch>=1.10
 
 
 # step 1: Data Preparation
