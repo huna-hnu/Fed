@@ -37,7 +37,7 @@ python Preprocess_Data.py.py  --dataset_name=PEMS07 --graph_signal_matrix_filena
 python Preprocess_Data.py.py  --dataset_name=PEMS-BAY --graph_signal_matrix_filename=data/PEMS-BAY/pems-bay.h5 --num_of_vertices=358
 
 # METR-LA
-python Preprocess_Data.py.py  --dataset_name=METR-LA --graph_signal_matrix_filename=data/METR-LA/metr-la.h5 --num_of_vertices=883
+python Preprocess_Data.py.py  --dataset_name=METR-LA --graph_signal_matrix_filename=data/METR-LA/metr-la.h5 --num_of_vertices=207
 
 ```
 # step 3: Run
