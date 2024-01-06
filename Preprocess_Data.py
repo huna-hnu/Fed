@@ -329,34 +329,27 @@ def normalization(train, val, test, train_y, val_y, test_y):
 
 
 # prepare dataset
-# parser = argparse.ArgumentParser()
-# parser.add_argument("--config", default='Configurations/PEMS03_astgcn.conf', type=str,
-#                     help="configuration file path")
-# args = parser.parse_args()
-# config = configparser.ConfigParser()
-# print('Read configuration file: %s' % (args.config))
-# config.read(args.config)
-# data_config = config['Data']
-# training_config = config['Training']
-#
-# adj_filename = data_config['adj_filename']
-# graph_signal_matrix_filename = data_config['graph_signal_matrix_filename']
-# if config.has_option('Data', 'id_filename'):
-#     id_filename = data_config['id_filename']
-# else:
-#     id_filename = None
 
-num_of_vertices = 170#int(data_config['num_of_vertices'])
-points_per_hour =12# int(data_config['points_per_hour'])
-num_for_predict = 12#int(data_config['num_for_predict'])
-len_input = 12#int(data_config['len_input'])
-dataset_name ='PEMS08'# data_config['dataset_name']
-num_of_weeks =0# int(training_config['num_of_weeks'])
-num_of_days =0# int(training_config['num_of_days'])
-num_of_hours =1# int(training_config['num_of_hours'])
-graph_signal_matrix_filename = './data/PEMS08/pems08.npz'#data_config['graph_signal_matrix_filename']
+parser = argparse.ArgumentParser()
+parser.add_argument('--dataset_name', type=str, default='PEMS08') # for read adj PEMS-BAY METR-LA
+parser.add_argument('--graph_signal_matrix_filename', type=str, default='data/PEMS08/pems08.npz') # PEMS-BAY/pems-bay METR-LA/metr-la
+parser.add_argument('--adj_file', type=str, default='') # PEMS-BAY/pems-bay METR-LA/metr-la
 
-adj_file= ''#data_config['adj_filename']
-num_client =6
+parser.add_argument('--num_of_vertices', type=int, default=170)
 
-all_data = read_and_generate_dataset(dataset_name,graph_signal_matrix_filename, num_of_weeks, num_of_days, num_of_hours, num_for_predict, points_per_hour, num_client, adj_file, save=True)
+parser.add_argument('--points_per_hour', type=int, default=12)
+parser.add_argument('--num_for_predict', type=int, default=12)
+parser.add_argument('--len_input', type=int, default=12)
+
+parser.add_argument('--num_of_weeks', type=int, default=0)
+parser.add_argument('--num_of_days', type=int, default=0)
+parser.add_argument('--num_of_hours', type=int, default=1)
+
+parser.add_argument('--num_client', type=int, default=6)
+
+args = parser.parse_args()
+
+
+all_data = read_and_generate_dataset(args.dataset_name,args.graph_signal_matrix_filename, args.num_of_weeks, args.num_of_days, args.num_of_hours, args.num_for_predict, args.points_per_hour, args.num_client, args.adj_file, save=True)
+
+
